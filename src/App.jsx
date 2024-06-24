@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProgressBar from './components/ProgressBar';
 import Question from './components/Question';
 import OptionSelector from './components/OptionSelector';
@@ -9,7 +9,7 @@ const questions = [
   "My leadership journey has progressed as I anticipated.",
   "I have spent fewer than 4 years in full time service or ministry.",
   "My plans are likely to succeed.",
-  "I’m beginning to believe the journey of service will bemuch harder than I anticipated.",
+  "I’m beginning to believe the journey of service will be much harder than I anticipated.",
   "I question whether I can remain effective in my role long-term."
 ];
 
@@ -25,45 +25,38 @@ const App = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [responses, setResponses] = useState(Array(questions.length).fill(null));
   const [progress, setProgress] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [isAnswered, setIsAnswered] = useState(false);
+
+  // Function to calculate and set progress
+  const updateProgress = (responses, currentQuestion) => {
+    const answeredQuestions = responses.slice(0, currentQuestion + 1).filter(response => response !== null).length;
+    setProgress((answeredQuestions / questions.length) * 100);
+  };
+
+  useEffect(() => {
+    updateProgress(responses, currentQuestion);
+  }, [responses, currentQuestion]);
 
   const handleOptionClick = (index) => {
     const newResponses = [...responses];
     newResponses[currentQuestion] = index;
     setResponses(newResponses);
 
-    setSelectedOption(index);
-
-    const answeredQuestions = newResponses.filter(response => response !== null).length;
-    setProgress((answeredQuestions / questions.length) * 100);
-    setIsAnswered(true);
-
     if (currentQuestion < questions.length - 1) {
       setTimeout(() => {
-        setSelectedOption(null);
         setCurrentQuestion(currentQuestion + 1);
-        setIsAnswered(false);
       }, 500);
     }
   };
 
   const handleNext = () => {
-    if (currentQuestion < questions.length - 1 && isAnswered) {
+    if (currentQuestion < questions.length - 1 && responses[currentQuestion] !== null) {
       setCurrentQuestion(currentQuestion + 1);
-      setIsAnswered(false);
     }
   };
 
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
-      setIsAnswered(true);
-
-      const answeredQuestions = responses.filter(response => response !== null).length;
-      setProgress((answeredQuestions / questions.length) * 100);
-    } else {
-      setProgress(0);
     }
   };
 
@@ -75,7 +68,7 @@ const App = () => {
         <Question question={questions[currentQuestion]} current={currentQuestion + 1} total={questions.length} />
         <OptionSelector
           options={options}
-          selectedOption={selectedOption}
+          selectedOption={responses[currentQuestion]}
           handleOptionClick={handleOptionClick}
         />
         <Navigation
@@ -83,7 +76,7 @@ const App = () => {
           handlePrevious={handlePrevious}
           canGoNext={currentQuestion < questions.length - 1}
           canGoPrevious={currentQuestion > 0}
-          isAnswered={isAnswered}
+          isAnswered={responses[currentQuestion] !== null}
         />
       </div>
     </div>
