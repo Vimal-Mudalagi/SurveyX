@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProgressBar from './components/ProgressBar';
 import Question from './components/Question';
-import OptionSelector from './components/OptionSelector';
+import OptionSelector from './components/OptionSelector'
 import Navigation from './components/Navigation';
 
 const questions = [
@@ -62,7 +62,7 @@ const App = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-[#8fcbd3]">
-      <div className="bg-white p-12 rounded-lg shadow-lg max-w-2xl h-4/5 w-full">
+      <div className="bg-white p-12 rounded-lg shadow-lg max-w-2xl h-5/6 w-full">
         <h1 className="text-center text-xl font-bold mb-12 mt-4 text-orange-600">ARE YOU DISILLUSIONED?</h1>
         <ProgressBar progress={progress} />
         <Question question={questions[currentQuestion]} current={currentQuestion + 1} total={questions.length} />

@@ -67,11 +67,11 @@ const OptionSelector = ({ options, selectedOption, handleOptionClick }) => {
           <div key={index} className={`slider-point ${tempSelectedOption === index ? 'selected' : ''}`}></div>
         ))}
       </div>
-      <div className="flex justify-between w-full mt-2 font-bold text-xl">
-        {options.map((option, index) => (
-          <div key={index} className="text-sm">
-            {option}
-          </div>
+      <div className="flex justify-between w-full mt-2 font-bold text-xl gap-1 md:gap-2">
+  {options.map((option, index) => (
+    <div key={index} className="text-sm flex-1 text-center break-words">
+      {option}
+    </div>
         ))}
       </div>
     </div>
